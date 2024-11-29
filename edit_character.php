@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db_connect.php';
+require 'header.php';
 
 // Redirect to login if not logged in or not an admin
 if (!isset($_SESSION['user_id']) || $_SESSION['is_admin'] != 1) {

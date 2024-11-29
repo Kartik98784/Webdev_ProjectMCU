@@ -1,6 +1,7 @@
 <?php
 require 'db_connect.php';
 require 'auth_admin.php';
+require 'header.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];

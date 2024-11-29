@@ -8,9 +8,33 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Fetch characters from the database
+// Fetch sort and search parameters
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'name'; // Default sort by name
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Build SQL query dynamically based on sort and search
 $sql = "SELECT * FROM Characters";
-$stmt = $pdo->query($sql);
+if (!empty($search)) {
+    $sql .= " WHERE name LIKE :search OR alias LIKE :search";
+}
+switch ($sort) {
+    case 'created_at':
+        $sql .= " ORDER BY created_at";
+        break;
+    case 'updated_at':
+        $sql .= " ORDER BY updated_at";
+        break;
+    case 'name':
+    default:
+        $sql .= " ORDER BY name";
+}
+
+// Prepare and execute the query
+$stmt = $pdo->prepare($sql);
+if (!empty($search)) {
+    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+}
+$stmt->execute();
 $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Check if the user is an admin
@@ -22,6 +46,21 @@ if (isset($_GET['logout'])) {
     header('Location: login.php');
     exit;
 }
+// Handle comment submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['character_id'])) {
+    $character_id = $_POST['character_id'];
+    $name = !empty($_POST['name']) ? $_POST['name'] : 'Anonymous';
+    $comment = $_POST['comment'];
+
+    if (!empty($comment)) {
+        $stmt = $pdo->prepare("INSERT INTO comments (character_id, name, comment) VALUES (:character_id, :name, :comment)");
+        $stmt->execute(['character_id' => $character_id, 'name' => $name, 'comment' => $comment]);
+    }
+}
+
+// Fetch characters and their comments
+$sql = "SELECT character_id, name, alias, description FROM characters";
+$characters = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -34,40 +73,84 @@ if (isset($_GET['logout'])) {
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
-            padding: 20px;
             margin: 0;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
             padding: 0;
+        }
+        .top-bar {
+            background-color: #007bff;
+            display: flex;
+            justify-content: center; /* Center the logo horizontally */
+            align-items: center;
+            padding: 10px;
+            height: 60px;
+            position: relative; /* Allow positioning of elements inside */
+        }
+        .top-bar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+        .top-bar .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px; /* Position the logout button at the top right */
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .top-bar .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+        .sort-bar {
+            background-color: #e9ecef;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .sort-bar select {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .search-bar {
+            background-color: #e9ecef;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-bar input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .character-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 20px;
         }
-        li {
+        .character-item {
             width: 300px;
             margin: 20px;
             padding: 20px;
-            border-radius: 8px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             text-align: center;
         }
-        .character-info {
-            font-size: 18px;
-            color: #333;
-        }
-        .buttons {
+        .character-item .buttons {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 10px;
         }
-        .buttons a, .buttons button {
+        .character-item .buttons a,
+        .character-item .buttons button {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -76,21 +159,9 @@ if (isset($_GET['logout'])) {
             border-radius: 5px;
             cursor: pointer;
         }
-        .buttons a:hover, .buttons button:hover {
+        .character-item .buttons a:hover,
+        .character-item .buttons button:hover {
             background-color: #0056b3;
-        }
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #f44336;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            border-radius: 5px;
-        }
-        .logout-btn:hover {
-            background-color: #d32f2f;
         }
         .add-btn {
             position: absolute;
@@ -105,44 +176,131 @@ if (isset($_GET['logout'])) {
         .add-btn:hover {
             background-color: #218838;
         }
+
+        .character-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #fff;
+}
+
+form {
+    margin-top: 15px;
+}
+
+form textarea, form input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment-item {
+    background: #f4f4f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+
     </style>
 </head>
 <body>
+    <!-- Top Blue Bar -->
+    <div class="top-bar">
+        <h1 class="logo">Marvel Characters</h1>
+        <a href="?logout=true" class="logout-btn">Logout</a>
+    </div>
 
-    <!-- Logout button positioned top right -->
-    <a href="?logout=true" class="logout-btn">Logout</a>
-    
-    <!-- Add New Character button positioned top left (visible only to admin) -->
-    <?php if ($is_admin): ?>
-        <a href="create_character.php" class="add-btn">Add New Character</a>
-    <?php endif; ?>
+    <!-- Add New Character Button -->
+    <a href="add_character.php" class="add-btn">Add New Character</a>
 
-    <h2>Marvel Characters</h2>
-    
-    <!-- Display character list in card format -->
-    <ul>
-    <?php foreach ($characters as $character): ?>
-        
-        <li>
-            <div class="character-info">
-                <strong><?php echo htmlspecialchars($character['name']); ?></strong><br>
-                Alias: <?php echo htmlspecialchars(!empty($character['alias']) ? $character['alias'] : 'N/A'); ?>
+    <!-- Search and Sort Bar -->
+    <div class="search-sort-bar">
+        <form action="list_characters.php" method="get" class="search-bar">
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="Search Characters..." 
+                value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit">Search</button>
+        </form>
+        <div class="sort-bar">
+    <label for="sort">Sort by:</label>
+    <select id="sort" name="sort" onchange="location = this.value;">
+        <option value="?sort=name&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'name') echo 'selected'; ?>>Name</option>
+        <option value="?sort=created_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'created_at') echo 'selected'; ?>>Created Date</option>
+        <option value="?sort=updated_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'updated_at') echo 'selected'; ?>>Updated Date</option>
+    </select>
+</div>
+
+    </div>
+
+    <!-- Display Characters -->
+    <ul class="character-list">
+        <?php foreach ($characters as $character): ?>
+            <li class="character-item">
+                <h2><?php echo htmlspecialchars($character['name']); ?></h2>
+                <p>Alias: <?php echo htmlspecialchars($character['alias'] ?: 'N/A'); ?></p>
+                <div class="buttons">
+                    <a href="view_character.php?id=<?php echo $character['character_id']; ?>">View</a>
+                    <?php if ($is_admin): ?>
+                        <a href="edit_character.php?id=<?php echo $character['character_id']; ?>">Edit</a>
+                        <a href="delete_character.php?id=<?php echo $character['character_id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                    <?php endif; ?>
+                </div>
+                <!-- Comment Form -->
+                <form method="POST" action="">
+                    <input type="hidden" name="character_id" value="<?php echo $character['character_id']; ?>">
+                    <?php if (!isset($_SESSION['user'])): ?>
+                        <input type="text" name="name" placeholder="Your Name" required>
+                    <?php endif; ?>
+                    <textarea name="comment" placeholder="Leave a comment" required></textarea>
+                    <button type="submit">Submit</button>
+                </form>
+
+                <!-- Display Comments -->
+                <div class="comments">
+                    <h4>Comments:</h4>
+                    <?php
+                    $stmt = $pdo->prepare("SELECT name, comment, created_at FROM comments WHERE character_id = :character_id ORDER BY created_at DESC");
+                    $stmt->execute(['character_id' => $character['character_id']]);
+                    $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    if ($comments):
+                        foreach ($comments as $comment): ?>
+                            <div class="comment-item">
+                                <p><strong><?php echo htmlspecialchars($comment['name']); ?>:</strong></p>
+                                <p><?php echo htmlspecialchars($comment['comment']); ?></p>
+                                <small><?php echo htmlspecialchars($comment['created_at']); ?></small>
+                            </div>
+                        <?php endforeach;
+                    else: ?>
+                        <p>No comments yet. Be the first to comment!</p>
+                    <?php endif; ?>
+                </div>
             </div>
-            <div class="buttons">
-                <!-- View button -->
-                <a href="view_character.php?id=<?php echo $character['character_id']; ?>">View</a>
-
-                <!-- Edit and Delete buttons visible only to admin -->
-                <?php if ($is_admin): ?>
-                    <a href="edit_character.php?id=<?php echo $character['character_id']; ?>">Edit</a>
-                    <a href="delete_character.php?id=<?php echo $character['character_id']; ?>" 
-                       onclick="return confirm('Are you sure you want to delete this character?')">Delete</a>
-                <?php endif; ?>
-            </div>
-        </li>
-    <?php endforeach; ?>
-</ul>
-
-
+        <?php endforeach; ?>
+    </ul>
 </body>
 </html>

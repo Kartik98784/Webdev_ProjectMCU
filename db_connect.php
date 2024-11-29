@@ -10,7 +10,7 @@
 
 ****************/
 
-define('DB_DSN', 'mysql:host=localhost;dbname=marvel;charset=utf8');
+define('DB_DSN', 'mysql:host=localhost;dbname=marvel_cms;charset=utf8');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 

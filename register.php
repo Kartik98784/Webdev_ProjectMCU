@@ -1,5 +1,6 @@
 <?php
 require 'db_connect.php';
+
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

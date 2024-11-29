@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db_connect.php';
+
 $message = "";
 
 // Check if the user is already logged in

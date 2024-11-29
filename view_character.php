@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db_connect.php';
+require 'header.php';
 
 // Check if character ID is provided
 if (!isset($_GET['id'])) {

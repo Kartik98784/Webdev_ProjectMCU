@@ -1,5 +1,6 @@
 <?php
 require 'db_connect.php';
+require 'header.php';
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
