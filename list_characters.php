@@ -46,21 +46,22 @@ if (isset($_GET['logout'])) {
     header('Location: login.php');
     exit;
 }
-// Handle comment submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['character_id'])) {
-    $character_id = $_POST['character_id'];
+
+// Handle global comment submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
     $name = !empty($_POST['name']) ? $_POST['name'] : 'Anonymous';
     $comment = $_POST['comment'];
 
     if (!empty($comment)) {
-        $stmt = $pdo->prepare("INSERT INTO comments (character_id, name, comment) VALUES (:character_id, :name, :comment)");
-        $stmt->execute(['character_id' => $character_id, 'name' => $name, 'comment' => $comment]);
+        $stmt = $pdo->prepare("INSERT INTO comments (character_id, name, comment) VALUES (NULL, :name, :comment)");
+        $stmt->execute(['name' => $name, 'comment' => $comment]);
     }
 }
 
-// Fetch characters and their comments
-$sql = "SELECT character_id, name, alias, description FROM characters";
-$characters = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+// Fetch all comments
+$comments_stmt = $pdo->prepare("SELECT * FROM comments ORDER BY created_at DESC");
+$comments_stmt->execute();
+$comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -79,11 +80,11 @@ $characters = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         .top-bar {
             background-color: #007bff;
             display: flex;
-            justify-content: center; /* Center the logo horizontally */
+            justify-content: center;
             align-items: center;
             padding: 10px;
             height: 60px;
-            position: relative; /* Allow positioning of elements inside */
+            position: relative;
         }
         .top-bar .logo {
             font-size: 24px;
@@ -94,7 +95,7 @@ $characters = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         .top-bar .logout-btn {
             position: absolute;
             top: 10px;
-            right: 10px; /* Position the logout button at the top right */
+            right: 10px;
             background-color: #f44336;
             color: white;
             padding: 10px 20px;
@@ -178,51 +179,49 @@ $characters = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .character-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    background: #fff;
-}
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background: #fff;
+        }
 
-form {
-    margin-top: 15px;
-}
+        form {
+            margin-top: 15px;
+        }
 
-form textarea, form input[type="text"] {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        form textarea, form input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
+        form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
 
-form button:hover {
-    background-color: #0056b3;
-}
+        form button:hover {
+            background-color: #0056b3;
+        }
 
-.comments {
-    margin-top: 20px;
-}
+        .comments {
+            margin-top: 20px;
+        }
 
-.comment-item {
-    background: #f4f4f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-
+        .comment-item {
+            background: #f4f4f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -242,18 +241,17 @@ form button:hover {
                 type="text" 
                 name="search" 
                 placeholder="Search Characters..." 
-                value="<?php echo htmlspecialchars($search); ?>">
+                value="<?php echo htmlspecialchars($search); ?>"> 
             <button type="submit">Search</button>
         </form>
         <div class="sort-bar">
-    <label for="sort">Sort by:</label>
-    <select id="sort" name="sort" onchange="location = this.value;">
-        <option value="?sort=name&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'name') echo 'selected'; ?>>Name</option>
-        <option value="?sort=created_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'created_at') echo 'selected'; ?>>Created Date</option>
-        <option value="?sort=updated_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'updated_at') echo 'selected'; ?>>Updated Date</option>
-    </select>
-</div>
-
+            <label for="sort">Sort by:</label>
+            <select id="sort" name="sort" onchange="location = this.value;">
+                <option value="?sort=name&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'name') echo 'selected'; ?>>Name</option>
+                <option value="?sort=created_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'created_at') echo 'selected'; ?>>Created Date</option>
+                <option value="?sort=updated_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'updated_at') echo 'selected'; ?>>Updated Date</option>
+            </select>
+        </div>
     </div>
 
     <!-- Display Characters -->
@@ -269,38 +267,31 @@ form button:hover {
                         <a href="delete_character.php?id=<?php echo $character['character_id']; ?>" onclick="return confirm('Are you sure?')">Delete</a>
                     <?php endif; ?>
                 </div>
-                <!-- Comment Form -->
-                <form method="POST" action="">
-                    <input type="hidden" name="character_id" value="<?php echo $character['character_id']; ?>">
-                    <?php if (!isset($_SESSION['user'])): ?>
-                        <input type="text" name="name" placeholder="Your Name" required>
-                    <?php endif; ?>
-                    <textarea name="comment" placeholder="Leave a comment" required></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-
-                <!-- Display Comments -->
-                <div class="comments">
-                    <h4>Comments:</h4>
-                    <?php
-                    $stmt = $pdo->prepare("SELECT name, comment, created_at FROM comments WHERE character_id = :character_id ORDER BY created_at DESC");
-                    $stmt->execute(['character_id' => $character['character_id']]);
-                    $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    if ($comments):
-                        foreach ($comments as $comment): ?>
-                            <div class="comment-item">
-                                <p><strong><?php echo htmlspecialchars($comment['name']); ?>:</strong></p>
-                                <p><?php echo htmlspecialchars($comment['comment']); ?></p>
-                                <small><?php echo htmlspecialchars($comment['created_at']); ?></small>
-                            </div>
-                        <?php endforeach;
-                    else: ?>
-                        <p>No comments yet. Be the first to comment!</p>
-                    <?php endif; ?>
-                </div>
-            </div>
+            </li>
         <?php endforeach; ?>
     </ul>
+
+    <?php if (empty($characters)): ?>
+        <p>No characters found. Try adjusting your search or sorting options.</p>
+    <?php endif; ?>
+
+    <!-- Global Comment Section at the Bottom -->
+    <div class="comments">
+        <h3>Global Comments</h3>
+        <form method="post">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <input type="text" name="name" placeholder="Your Name" required>
+            <?php endif; ?>
+            <textarea name="comment" placeholder="Add a comment..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+
+        <?php foreach ($comments as $comment): ?>
+            <div class="comment-item">
+                <strong><?php echo htmlspecialchars($comment['name']); ?>:</strong>
+                <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </body>
 </html>
