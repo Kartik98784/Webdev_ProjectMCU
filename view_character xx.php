@@ -37,15 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment'])) {
 }
 
 // Fetch comments for the character
-$sql = "SELECT comments.id AS comment_id, comments.comment, users.username 
+$sql = "SELECT comments.comment, users.username 
         FROM comments 
         JOIN users ON comments.id = users.id
         WHERE comments.character_id = :id";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['id' => $character_id]);
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -144,37 +142,23 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Comments Section -->
         <div class="comments-section">
-    <h3>Comments</h3>
-    <?php if ($comments): ?>
-        
-        <?php foreach ($comments as $comment): ?>
-            <div class="comment">
-                <strong><?php echo htmlspecialchars($comment['username']); ?>:</strong>
-                <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
-                
-                <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                    <!-- Delete Button for Admin -->
-                    <form method="post" action="delete_comment.php" style="display:inline;">
-    <input type="hidden" name="comment_id" value="<?php echo htmlspecialchars($comment['comment_id']); ?>">
-    <button type="submit" style="background-color:#dc3545; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">
-        Delete
-    </button>
-</form>
+            <h3>Comments</h3>
+            <?php if ($comments): ?>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="comment">
+                        <strong><?php echo htmlspecialchars($comment['username']); ?>:</strong>
+                        <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No comments yet.</p>
+            <?php endif; ?>
 
-
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No comments yet.</p>
-    <?php endif; ?>
-
-    <form method="post" class="comment-form">
-        <textarea name="comment" placeholder="Add a comment..." rows="4" required></textarea>
-        <button type="submit">Submit Comment</button>
-    </form>
-</div>
-
+            <form method="post" class="comment-form">
+                <textarea name="comment" placeholder="Add a comment..." rows="4" required></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
     </div>
 
 </body>
