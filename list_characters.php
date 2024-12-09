@@ -134,6 +134,7 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
+            list-style-type: none ;
         }
         .character-item {
             width: 300px;
@@ -274,24 +275,5 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (empty($characters)): ?>
         <p>No characters found. Try adjusting your search or sorting options.</p>
     <?php endif; ?>
-
-    <!-- Global Comment Section at the Bottom -->
-    <div class="comments">
-        <h3>Global Comments</h3>
-        <form method="post">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <input type="text" name="name" placeholder="Your Name" required>
-            <?php endif; ?>
-            <textarea name="comment" placeholder="Add a comment..." required></textarea>
-            <button type="submit">Submit</button>
-        </form>
-
-        <?php foreach ($comments as $comment): ?>
-            <div class="comment-item">
-                <strong><?php echo htmlspecialchars($comment['name']); ?>:</strong>
-                <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
-            </div>
-        <?php endforeach; ?>
-    </div>
 </body>
 </html>
