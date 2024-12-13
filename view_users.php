@@ -16,11 +16,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Users</title>
     <link rel="stylesheet" href="users.css">
-    <style>
-        h2{
-            te
-        }
-    </style>
 </head>
 <body>
     <h2>User List</h2>
