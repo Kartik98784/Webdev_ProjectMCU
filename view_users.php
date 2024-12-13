@@ -15,25 +15,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Users</title>
+    <link rel="stylesheet" href="users.css">
     <style>
-        /* Add styles for the user table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
+        h2{
+            te
         }
     </style>
 </head>
 <body>
     <h2>User List</h2>
-    <a href="add_user.php">Add New User</a>
+    <a href="add_user.php" class="add-user">Add New User</a>
     <table>
         <thead>
             <tr>
@@ -50,8 +41,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo htmlspecialchars($user['username']); ?></td>
                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                     <td>
-                        <a href="edit_user.php?id=<?php echo $user['id']; ?>">Edit</a> | 
-                        <a href="delete_user.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                        <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="edit">Edit</a> | 
+                        <a href="delete_user.php?id=<?php echo $user['id']; ?>"  class="delete" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
