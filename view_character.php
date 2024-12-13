@@ -182,6 +182,16 @@ a:hover {
     border: 1px solid #ccc;
 }
 
+.character-image {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px 0;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .error {
     color: red;
     font-size: 14px;
@@ -193,6 +203,9 @@ a:hover {
     <div class="container">
         <h2>Character Details</h2>
         <div class="character-details">
+            <?php if (!empty($character['image_path'])): ?>
+                <img src="<?php echo htmlspecialchars($character['image_path']); ?>" alt="Character Image" class="character-image">
+            <?php endif; ?>
             <p><strong>Name:</strong> <?php echo htmlspecialchars($character['name']); ?></p>
             <p><strong>Alias:</strong> <?php echo htmlspecialchars(!empty($character['alias']) ? $character['alias'] : 'N/A'); ?></p>
             <p><strong>Powers:</strong> <?php echo htmlspecialchars($character['powers']); ?></p>
