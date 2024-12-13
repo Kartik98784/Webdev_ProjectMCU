@@ -87,36 +87,34 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Adjust to start from the top */
     height: 100vh;
+    box-sizing: border-box;
 }
-
 .container {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    width: 100%;
+    max-width: 900px; /* Increased max width for larger screens */
+    margin: 20px;
+    box-sizing: border-box;
+    overflow: hidden; /* Prevents content from overflowing */
 }
-
 h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 20px;
 }
-
 .character-details p {
     font-size: 16px;
     margin-bottom: 10px;
+    word-wrap: break-word; /* Prevents words from overflowing */
 }
-
 .character-details strong {
     color: #007bff;
 }
-
 a {
     display: inline-block;
     margin-top: 20px;
@@ -126,62 +124,46 @@ a {
     text-decoration: none;
     text-align: center;
     border-radius: 4px;
+    width: 100%; /* Ensures the button is properly aligned */
+    box-sizing: border-box;
 }
-
 a:hover {
     background-color: #0056b3;
 }
-
 .comments-section {
     margin-top: 30px;
-    flex-grow: 1; /* Allows the comments section to grow and take available space */
-    overflow-y: auto; /* Makes the comments section scrollable if it exceeds the available space */
-    max-height: 300px; /* Sets a maximum height for the comments section */
 }
-
 .comment {
     padding: 10px;
     background-color: #f1f1f1;
     margin-bottom: 15px;
     border-radius: 4px;
 }
-
 .comment strong {
     color: #007bff;
 }
-
 .comment-form textarea {
-    width: 80%;
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
     font-size: 16px;
+    resize: vertical; /* Allows vertical resizing */
 }
-
 .comment-form button {
     background-color: #28a745;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
 }
-
 .comment-form button:hover {
     background-color: #218838;
 }
-
-.captcha {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.captcha img {
-    margin-left: 10px;
-    border: 1px solid #ccc;
-}
-
 .character-image {
     width: 100%;
     max-width: 300px;
@@ -196,6 +178,17 @@ a:hover {
     color: red;
     font-size: 14px;
 }
+.captcha {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.captcha img {
+    margin-left: 10px;
+    border: 1px solid #ccc;
+}
+
 </style>
 </head>
 <body>
