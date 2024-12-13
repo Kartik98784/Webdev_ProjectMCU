@@ -175,6 +175,15 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
             color: white;
             border-radius: 5px;
         }
+        .add-user-btn {
+            top: 20px;
+            left: 20px;
+            background-color: #28a745;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
         .add-btn:hover {
             background-color: #218838;
         }
@@ -238,6 +247,8 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Search and Sort Bar -->
     <div class="search-sort-bar">
+    <a href="view_users.php" class="add-user-btn">View Users</a>
+
         <form action="list_characters.php" method="get" class="search-bar">
             <input 
                 type="text" 

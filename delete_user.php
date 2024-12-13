@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'db_connect.php';
 require 'auth_admin.php'; // Ensure only admins can access
 
