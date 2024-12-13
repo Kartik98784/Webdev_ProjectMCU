@@ -232,8 +232,9 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="?logout=true" class="logout-btn">Logout</a>
     </div>
 
-    <!-- Add New Character Button -->
+    <?php if ($is_admin): ?>
     <a href="add_character.php" class="add-btn">Add New Character</a>
+<?php endif; ?>
 
     <!-- Search and Sort Bar -->
     <div class="search-sort-bar">
