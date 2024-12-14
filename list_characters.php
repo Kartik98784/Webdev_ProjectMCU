@@ -232,6 +232,21 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-bottom: 10px;
             border-radius: 5px;
         }
+        .add-user-btn {
+            position: absolute;
+            top: 20px; /* Increase this from 20px to 24px to shift down */
+            left: 210px;
+            background-color: #28a745;
+            padding: 10px 25px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+}
+
+.add-user-btn:hover {
+    background-color: #218838;
+}
+
     </style>
 </head>
 <body>
