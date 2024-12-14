@@ -130,7 +130,7 @@ body {
     position: absolute;
     top: 10px;
     left: 240px; 
-    background-color: #27ae60; /* Updated for a consistent color scheme */
+    background-color: #27ae60;
     padding: 10px 20px;
     text-decoration: none;
     color: white;
@@ -147,7 +147,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #16a085; /* Updated bar color to teal green */
+    background-color: #16a085; 
     padding: 15px 20px;
     border-bottom: 1px solid #2c3e50;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -160,12 +160,12 @@ body {
     border: 1px solid #7f8c8d;
     border-radius: 5px;
     transition: border-color 0.3s;
-    background-color: #34495e; /* Matching background color */
+    background-color: #34495e; 
     color: #ecf0f1;
 }
 
 .search-bar input:focus {
-    border-color: #1abc9c; /* Light green focus */
+    border-color: #1abc9c; 
     outline: none;
 }
 
@@ -211,7 +211,7 @@ body {
 .character-item {
     width: 280px;
     padding: 20px;
-    background: #34495e; /* Dark background for each item */
+    background: #34495e; 
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -226,12 +226,12 @@ body {
 .character-item h2 {
     font-size: 1.5em;
     margin-bottom: 10px;
-    color: #ecf0f1; /* Light text for character names */
+    color: #ecf0f1; 
 }
 
 .character-item p {
     font-size: 1em;
-    color: #bdc3c7; /* Lighter text for details */
+    color: #bdc3c7;
     margin-bottom: 15px;
 }
 
@@ -239,7 +239,7 @@ body {
     padding: 8px 15px;
     font-size: 14px;
     color: white;
-    background-color: #1abc9c; /* Green button color */
+    background-color: #1abc9c; 
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
