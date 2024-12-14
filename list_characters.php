@@ -71,180 +71,231 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marvel Characters</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        .top-bar {
-            background-color: #007bff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            height: 60px;
-            position: relative;
-        }
-        .top-bar .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-        }
-        .top-bar .logout-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .top-bar .logout-btn:hover {
-            background-color: #d32f2f;
-        }
-        .sort-bar {
-            background-color: #e9ecef;
-            padding: 10px;
-            display: flex;
-            justify-content: flex-end;
-        }
-        .sort-bar select {
-            padding: 5px;
-            font-size: 16px;
-        }
-        .search-bar {
-            background-color: #e9ecef;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .search-bar input {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .character-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-            list-style-type: none ;
-        }
-        .character-item {
-            width: 300px;
-            margin: 20px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
-        .character-item .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .character-item .buttons a,
-        .character-item .buttons button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .character-item .buttons a:hover,
-        .character-item .buttons button:hover {
-            background-color: #0056b3;
-        }
-        .add-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #28a745;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            border-radius: 5px;
-        }
-        .add-user-btn {
-            top: 20px;
-            left: 20px;
-            background-color: #28a745;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            border-radius: 5px;
-        }
-        .add-btn:hover {
-            background-color: #218838;
-        }
-
-        .character-item {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            background: #fff;
-        }
-
-        form {
-            margin-top: 15px;
-        }
-
-        form textarea, form input[type="text"] {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        form button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        form button:hover {
-            background-color: #0056b3;
-        }
-
-        .comments {
-            margin-top: 20px;
-        }
-
-        .comment-item {
-            background: #f4f4f9;
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .add-user-btn {
-            position: absolute;
-            top: 20px; /* Increase this from 20px to 24px to shift down */
-            left: 210px;
-            background-color: #28a745;
-            padding: 10px 25px;
-            text-decoration: none;
-            color: white;
-            border-radius: 5px;
+       body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
 }
 
-.add-user-btn:hover {
+/* Top Bar */
+.top-bar {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.top-bar .logout-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.top-bar .logout-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Buttons */
+/* Add Character Button */
+.add-character-btn {
+    position: absolute;
+    top: 10px;
+    left: 390px; 
+    background-color: #28a745;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.add-character-btn:hover {
     background-color: #218838;
+}
+
+/* View Users Button */
+.view-users-btn {
+    position: absolute;
+    top: 10px;
+    left: 240px; 
+    background-color: #28a745;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.view-users-btn:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Search and Sort Bar */
+.search-sort-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+}
+
+.search-bar input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.search-bar input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+.sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-bar select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.sort-bar select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Character List */
+.character-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    list-style: none;
+}
+
+.character-item {
+    width: 280px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.character-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.character-item h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.character-item p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.character-item .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.character-item .buttons a {
+    padding: 8px 15px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.character-item .buttons a:hover {
+    background-color: #0056b3;
+}
+
+/* Comments Section */
+.comments {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-item {
+    background: #f9f9fc;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.comment-item h4 {
+    margin: 0 0 5px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.comment-item p {
+    margin: 0;
+    font-size: 0.95em;
+    color: #555;
 }
 
     </style>
@@ -257,30 +308,29 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <?php if ($is_admin): ?>
-    <a href="add_character.php" class="add-btn">Add New Character</a>
+        <a href="add_character.php" class="add-character-btn">Add Character</a>
 <?php endif; ?>
 
-    <!-- Search and Sort Bar -->
-    <div class="search-sort-bar">
-    <a href="view_users.php" class="add-user-btn">View Users</a>
-
-        <form action="list_characters.php" method="get" class="search-bar">
-            <input 
-                type="text" 
-                name="search" 
-                placeholder="Search Characters..." 
-                value="<?php echo htmlspecialchars($search); ?>"> 
-            <button type="submit">Search</button>
-        </form>
-        <div class="sort-bar">
-            <label for="sort">Sort by:</label>
-            <select id="sort" name="sort" onchange="location = this.value;">
-                <option value="?sort=name&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'name') echo 'selected'; ?>>Name</option>
-                <option value="?sort=created_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'created_at') echo 'selected'; ?>>Created Date</option>
-                <option value="?sort=updated_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'updated_at') echo 'selected'; ?>>Updated Date</option>
-            </select>
-        </div>
+<!-- Search and Sort Bar -->
+<div class="search-sort-bar">
+    <form action="list_characters.php" method="get" class="search-bar">
+        <input 
+            type="text" 
+            name="search" 
+            placeholder="Search Characters..." 
+            value="<?php echo htmlspecialchars($search); ?>"> 
+        <button type="submit">Search</button>
+    </form>
+    <div class="sort-bar">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort" onchange="location = this.value;">
+            <option value="?sort=name&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'name') echo 'selected'; ?>>Name</option>
+            <option value="?sort=created_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'created_at') echo 'selected'; ?>>Created Date</option>
+            <option value="?sort=updated_at&search=<?php echo urlencode($search); ?>" <?php if ($sort == 'updated_at') echo 'selected'; ?>>Updated Date</option>
+        </select>
     </div>
+</div>
+
 
     <!-- Display Characters -->
     <ul class="character-list">

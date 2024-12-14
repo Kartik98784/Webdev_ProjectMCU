@@ -80,113 +80,143 @@ if (isset($_GET['delete_comment_id']) && $is_admin) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Character</title>
     <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Adjust to start from the top */
-    height: 100vh;
+    align-items: flex-start;
+    min-height: 100vh;
     box-sizing: border-box;
-}
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 900px; /* Increased max width for larger screens */
-    margin: 20px;
-    box-sizing: border-box;
-    overflow: hidden; /* Prevents content from overflowing */
-}
-h2 {
-    text-align: center;
     color: #333;
+}
+
+.container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    margin: 30px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+h2, h3 {
+    text-align: center;
+    color: #222;
+    font-weight: 700;
     margin-bottom: 20px;
 }
+
 .character-details p {
-    font-size: 16px;
-    margin-bottom: 10px;
-    word-wrap: break-word; /* Prevents words from overflowing */
+    font-size: 18px;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    line-height: 1.6;
 }
+
 .character-details strong {
-    color: #007bff;
+    color: #0077cc;
 }
+
 a {
     display: inline-block;
     margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 12px 20px;
+    background: linear-gradient(to right, #007bff, #0056b3);
     color: white;
     text-decoration: none;
     text-align: center;
-    border-radius: 4px;
-    width: 100%; /* Ensures the button is properly aligned */
-    box-sizing: border-box;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
+
 a:hover {
-    background-color: #0056b3;
+    background: linear-gradient(to right, #0056b3, #003d7a);
 }
+
 .comments-section {
-    margin-top: 30px;
+    margin-top: 40px;
 }
+
 .comment {
-    padding: 10px;
-    background-color: #f1f1f1;
-    margin-bottom: 15px;
-    border-radius: 4px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .comment strong {
-    color: #007bff;
+    color: #0077cc;
+    font-weight: 500;
 }
+
 .comment-form textarea {
     width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
     font-size: 16px;
-    resize: vertical; /* Allows vertical resizing */
+    resize: vertical;
+    background: #fafafa;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
 }
+
 .comment-form button {
-    background-color: #28a745;
+    background: linear-gradient(to right, #28a745, #218838);
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease;
     width: 100%;
     box-sizing: border-box;
 }
+
 .comment-form button:hover {
-    background-color: #218838;
+    background: linear-gradient(to right, #218838, #1e6b2d);
 }
+
+.comment-form .captcha {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.comment-form .captcha img {
+    margin-left: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px;
+}
+
 .character-image {
     width: 100%;
-    max-width: 300px;
-    margin: 20px 0;
-    border-radius: 8px;
+    max-width: 350px;
+    margin: 20px auto;
+    border-radius: 10px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .error {
-    color: red;
+    color: #d9534f;
     font-size: 14px;
-}
-.captcha {
-    display: flex;
-    align-items: center;
+    font-weight: 500;
     margin-bottom: 10px;
-}
-
-.captcha img {
-    margin-left: 10px;
-    border: 1px solid #ccc;
+    text-align: center;
 }
 
 </style>
