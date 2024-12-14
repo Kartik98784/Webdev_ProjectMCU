@@ -73,7 +73,7 @@ $comments = $comments_stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #2c3e50; /* Dark blue-gray background */
+    background-color: #263238; /* Dark gray-blue background */
     margin: 0;
     padding: 0;
     color: #ecf0f1; /* Light text color */
@@ -81,7 +81,7 @@ body {
 
 /* Top Bar */
 .top-bar {
-    background: linear-gradient(90deg, #8e44ad, #2c3e50); /* Purple to Dark Blue gradient */
+    background: linear-gradient(90deg, #2C3E50, #5F4B8B); /* Dark Navy to SKU Blue */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -130,7 +130,7 @@ body {
     position: absolute;
     top: 10px;
     left: 240px; 
-    background-color: #27ae60;
+    background-color: #27ae60; /* Updated for a consistent color scheme */
     padding: 10px 20px;
     text-decoration: none;
     color: white;
@@ -139,7 +139,7 @@ body {
 }
 
 .view-users-btn:hover {
-    background-color: #3498db;
+    background-color: #2980b9;
 }
 
 /* Search and Sort Bar */
@@ -172,7 +172,7 @@ body {
 .search-bar button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #1abc9c;
+    background-color:rgb(102, 187, 170);
     color: white;
     border: none;
     border-radius: 5px;
